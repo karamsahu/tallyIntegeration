@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ENVELOPE>
+   <HEADER>
+      <VERSION>Version Number</VERSION>
+      <STATUS>-1/0/1</STATUS>
+   </HEADER>
+   <BODY>
+      <DESC>
+         <STATICVARIABLES>Static Variables Specification</STATICVARIABLES>
+         <REPEATVARIABLES>Repeat Variables Specification</REPEATVARIABLES>
+         <FETCHLIST />
+         <FUNCPARAMLIST>Parameter Specification</FUNCPARAMLIST>
+         <TDL>TDL Information</TDL>
+      </DESC>
+      <DATA>Data (if applicable)</DATA>
+   </BODY>
+</ENVELOPE>

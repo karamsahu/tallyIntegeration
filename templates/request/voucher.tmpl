@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ENVELOPE>
+	 <HEADER>
+	 	 <VERSION>$version</VERSION>
+		 <TALLYREQUEST>$tallyRequest</TALLYREQUEST>
+		 <TYPE>$type</TYPE>
+		 <ID>$id</ID>
+	 </HEADER>
+	<BODY>
+		<DESC>$desc</DESC>
+			 <DATA>
+				 <TALLYMESSAGE>
+					 <VOUCHER Action="$action" DATE="$date" TAGNAME="$tagName" TAGVALUE="$tagValue" VCHTYPE="$vchType">
+					 <DATE>$date</DATE>
+					 <NARRATION>$narration</NARRATION>
+					 </VOUCHER>
+				 </TALLYMESSAGE>
+			 </DATA>
+	 </BODY>
+</ENVELOPE>	 
