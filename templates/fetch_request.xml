@@ -1,0 +1,24 @@
+ <ENVELOPE>
+	<HEADER>
+		<VERSION>1</VERSION>
+		<TALLYREQUEST>$tallyRequest</TALLYREQUEST>	
+		<TYPE>$type</TYPE>
+		<SUBTYPE>$subType</SUBTYPE>
+		<ID TYPE="$idType">$id</ID>
+	</HEADER>
+	<DESC>
+		<STATICVARIABLES>
+			<SVCURRENTCOMPANY>$currentCompany</SVCURRENTCOMPANY>
+		</STATICVARIABLES>
+		<REAPEATVARIABLES>
+		</REPEATVARIABLES>
+		<FTECHLIST>
+			#foreach($record in $fetchList)
+			<FETCH>$record.value</FETCH>
+			#end
+		</FETCHLIST>
+		
+		
+	</DESC>
+	
+</ENVELOPE>
