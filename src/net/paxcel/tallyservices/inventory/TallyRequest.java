@@ -10,13 +10,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class TallyRequest {
 	   	 
 		/*suppy xml to this method and it will output resopnse to console*/
-	    public static void SendToTally(String requestFor) throws Exception{
+	    public static String SendToTally(String requestFor) throws Exception{
 	        String Url = "http://172.16.1.126:9000/";      
 
 	        String SOAPAction = "";
@@ -61,17 +59,21 @@ public class TallyRequest {
 
 	// Read the response and write it to standard out.
 
-	        InputStreamReader isr =
-	                new InputStreamReader(httpConn.getInputStream());
+	        InputStreamReader isr = new InputStreamReader(httpConn.getInputStream());
 	        BufferedReader in = new BufferedReader(isr);
 
 	        String inputLine;
+	        String tallyXmlResponse ="";
 	        	        
 	        while ((inputLine = in.readLine()) != null) {
-	            System.err.println(inputLine);
+	            //System.err.println(inputLine);
+	            tallyXmlResponse+=inputLine+"\n";
 	        }
+	        
+	        System.err.println(tallyXmlResponse);
 
 	        in.close();
+	        return tallyXmlResponse;
 	    }
 
 	    public static void copy(InputStream in, OutputStream out)
@@ -96,17 +98,4 @@ public class TallyRequest {
 	        }
 	    }
   
-	    public static void getAllInventory(){
-	    	try {
-				//supplying xml template to fetch details of all stock from tally
-	    		String path = "templates\\fetch_inidvidual_stock_item.xml";
-	    		/*Reading xml file to string*/
-	    		byte[] encoded = Files.readAllBytes(Paths.get(path));
-	    		String xml = new String(encoded);
-	    		/*passing xml data to get response from tally*/
-	    		SendToTally(xml);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	    }
 }// class closed

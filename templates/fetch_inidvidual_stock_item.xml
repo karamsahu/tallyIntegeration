@@ -17,7 +17,6 @@
    		<FETCH>Name</FETCH>
    		<FETCH>OpeningRate</FETCH>
    		<FETCH>OpeningBalance</FETCH>
-   		
    </FETCHLIST>   
   </DESC>
  </BODY>

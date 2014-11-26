@@ -34,7 +34,7 @@ public class TallyODBC {
             		+ "StockItem.`$_ClosingBalance` FROM "
             		+ "Demo.TallyUser.StockItem StockItem where StockItem.$Name LIKE '%"+itemName+"%' ORDER BY "
             		+ "StockItem.`$Parent`";
-        String s1 ="select * from Stockitem";
+        String s1 ="select $Name from ODBCTables";
         System.out.println(s1);
         stmt.executeQuery(s1);
             

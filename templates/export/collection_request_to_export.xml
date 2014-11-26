@@ -1,0 +1,28 @@
+
+<ENVELOPE>
+	<HEADER>
+        <VERSION>1</VERSION> 
+        <TALLYREQUEST>Export</TALLYREQUEST>
+        <TYPE>COLLECTION</TYPE>
+        <ID>$id</iD>
+	</HEADER>
+	<BODY>
+		<DESC>
+			<STATICVARIABLES>
+				<SVEXPORTFORMAT>$$SysName:XML</SVEXPORTFORMAT>
+			</STATICVARIABLES>
+			<TDL>
+				<TDLMESSAGE>
+					<COLLECTION NAME="$id" ISINITIALIZE="Yes">
+						<TYPE>$collectionType</TYPE>
+						#foreach($method in $methodList)
+						<NATIVEMETHOD>$method</NATIVEMETHOD>
+						#end
+					</COLLECTION>
+				</TDLMESSAGE>
+			</TDL>
+		</DESC>
+	</BODY>
+	
+	
+<ENVELOPE>

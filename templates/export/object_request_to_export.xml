@@ -1,0 +1,34 @@
+
+<ENVELOPE>
+	<HEADER>
+	
+        <VERSION>1</VERSION> 
+        <TALLYREQUEST>Export</TALLYREQUEST>
+        <TYPE>OBJECT</TYPE>
+		<SUBTYPE>$subType</SUBTYPE>
+        <ID TYPE="$idType">$id</iD>
+	</HEADER>
+	<BODY>
+		<DESC>
+			<STATICVARIABLES>
+				<SVEXPORTFORMAT>$$SysName:XML</SVEXPORTFORMAT>
+			</STATICVARIABLES>
+			<FETCHHLIST>
+				#foreach($data in $fetchList)
+					<FETCH>$data</FETCH>
+				#end
+			</FETCHLIST>
+			<TDL>
+				<TDLMESSAGE>
+					<OBJECT NAME="$subType" ISINITIALIZE="Yes">
+						<LOCALFORMULA>
+							$localFormula
+						</LOCALFORMULA>
+					</OBJECT>
+					</TDLMESSAGE>
+			</TDL>
+		</DESC>
+	</BODY>
+	
+	
+<ENVELOPE>

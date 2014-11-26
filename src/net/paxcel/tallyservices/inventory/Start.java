@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.paxcel.tallyservies.xmlparser.XmlParser;
+
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -17,11 +19,14 @@ public class Start {
 	
 	public static void main(String [] args){
 		loadTemplates();					//load xml templates
-		requestType="show one"; 			//setting type of request
+		requestType="show pnl"; 			//setting type of request
 		path = checkRequest(requestType);	//set template path as per the request
 		xmlWithValue = fillTemplate(path);	//fillTemplate method create xml with values
 		try {
-			TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for response
+			String tallyXmlResponse = TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for to get tally response xml
+			if(requestType.equals("show pnl")){
+				XmlParser.getProfitAndLoss(tallyXmlResponse);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,6 +41,8 @@ public class Start {
 			path= requestMap.get("getOneStock").toString();
 		}else if(requestType.equals("show summary")){
 			path= requestMap.get("getStockSummary").toString();
+		}else if(requestType.equals("show pnl")){
+			path= requestMap.get("getPNL").toString();
 		}else{
 			System.err.println("Unknow argument , running default action");
 			path="templates\\test.xml";
@@ -50,7 +57,8 @@ public class Start {
 		requestMap = new HashMap<String,String>();
 		requestMap.put("getAllStock", "templates\\fetch_full_stock_detail.xml");
 		requestMap.put("getOneStock", "templates\\fetch_inidvidual_stock_item.xml");
-		requestMap.put("createStock", "templates\\insert_stock_item.xml");	
+		requestMap.put("createStock", "templates\\insert_stock_item.xml");
+		requestMap.put("getPNL", "templates\\fetch_PNL_summary.xml");
 		return requestMap;
 	}
 		
