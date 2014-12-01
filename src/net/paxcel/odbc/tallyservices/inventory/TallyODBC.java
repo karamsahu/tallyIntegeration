@@ -19,10 +19,28 @@ public class TallyODBC {
 	private static  void getStockItem(String itemName){
 		try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-
             Connection con = DriverManager.getConnection("jdbc:odbc:TallyODBC64_9000", "", "");
             Statement stmt = (Statement) con.createStatement();
-        String s = ""
+            String s1 ="select * from ODBCTables";
+            stmt.executeQuery(s1);
+            
+            ResultSet rs1 = stmt.getResultSet();
+            int numOfCol = rs1.getMetaData().getColumnCount();
+            
+            while(rs1.next()){
+            	   for(int j=1; j<numOfCol; j++){
+            		   if(rs1.getString(j)!=null){
+            			   System.out.print(rs1.getMetaData().getColumnLabel(j)+"--");
+            			   System.out.println(rs1.getString(j));
+            		   }else{
+            			   System.err.println("noData");
+            		   }
+            	   }
+            	   System.err.println("\n----------------------------------------------------------");
+            	   
+               }
+            
+            String s = ""
             		+ "SELECT "
             		+ "StockItem.`$Parent`, "
             		+ "StockItem.`$Name`, "
@@ -34,27 +52,14 @@ public class TallyODBC {
             		+ "StockItem.`$_ClosingBalance` FROM "
             		+ "Demo.TallyUser.StockItem StockItem where StockItem.$Name LIKE '%"+itemName+"%' ORDER BY "
             		+ "StockItem.`$Parent`";
-        String s1 ="select $Name from ODBCTables";
+       
         System.out.println(s1);
-        stmt.executeQuery(s1);
+       
             
          //stmt.executeQuery("SELECT $Parent, StockItem.$Name FROM StockItem  order by $parent");//("Select * from Demo.TallyUser.StockItem Where StockItem.$Name=");
             
-          ResultSet rs1 = stmt.getResultSet();
-          int numOfCol = rs1.getMetaData().getColumnCount();
-          
-          while(rs1.next()){
-       	   for(int j=1; j<numOfCol; j++){
-       		   if(rs1.getString(j)!=null){
-       			   System.out.print(rs1.getMetaData().getColumnLabel(j)+"--");
-       			   System.out.println(rs1.getString(j));
-       		   }else{
-       			   System.err.println("noData");
-       		   }
-       	   }
-       	   System.err.println("\n----------------------------------------------------------");
-       	   
-          }
+                    
+         
             
             /*int currentRow = rs.getRow();
             

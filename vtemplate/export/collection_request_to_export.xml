@@ -13,11 +13,9 @@
 			</STATICVARIABLES>
 			<TDL>
 				<TDLMESSAGE>
-					<COLLECTION NAME="$id" ISINITIALIZE="Yes">
+					<COLLECTION NAME="$collectionId" ISINITIALIZE="Yes">
 						<TYPE>$collectionType</TYPE>
-						#foreach($method in $methodList)
-						<NATIVEMETHOD>$method</NATIVEMETHOD>
-						#end
+						<FETCH>$fetchList</FETCH>						
 					</COLLECTION>
 				</TDLMESSAGE>
 			</TDL>

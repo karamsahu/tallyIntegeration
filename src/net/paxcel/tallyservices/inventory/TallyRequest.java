@@ -13,37 +13,23 @@ import java.net.URLConnection;
 
 public class TallyRequest {
 	   	 
-		/*suppy xml to this method and it will output resopnse to console*/
+	/*suppy xml to this method and it will output resopnse to console*/
 	    public static String SendToTally(String requestFor) throws Exception{
 	        String Url = "http://172.16.1.126:9000/";      
-
 	        String SOAPAction = "";
-	        
-	        
-    
 	// request comes in xml format containing data inside
 	        String request = requestFor;
-	        
-	        System.out.println("Request :");
-	        System.out.println(request);
-	        
-
+	        System.out.println("Request :" +request);
 	// Create the connection where we're going to send the file.
 	        URL url = new URL(Url);
 	        URLConnection connection = url.openConnection();
 	        HttpURLConnection httpConn = (HttpURLConnection) connection;
-
-	       
 	        ByteArrayInputStream bin = new ByteArrayInputStream(request.getBytes());
 	        ByteArrayOutputStream bout = new ByteArrayOutputStream();
 	        System.out.println(bout);
-
 	// Copy the SOAP file to the open connection.
-	       
 	        copy(bin, bout);     
-
 	        byte[] b = bout.toByteArray();
-
 	// Set the appropriate HTTP parameters.
 	        httpConn.setRequestProperty("Content-Length", String.valueOf(b.length));
 	        httpConn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
@@ -61,10 +47,9 @@ public class TallyRequest {
 
 	        InputStreamReader isr = new InputStreamReader(httpConn.getInputStream());
 	        BufferedReader in = new BufferedReader(isr);
-
 	        String inputLine;
 	        String tallyXmlResponse ="";
-	        	        
+
 	        while ((inputLine = in.readLine()) != null) {
 	            //System.err.println(inputLine);
 	            tallyXmlResponse+=inputLine+"\n";

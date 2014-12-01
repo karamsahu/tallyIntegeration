@@ -1,0 +1,20 @@
+ <ENVELOPE>
+	 <HEADER>
+		 <VERSION>1</VERSION>
+		 <TALLYREQUEST>Import</TALLYREQUEST>
+		 <TYPE>Data</TYPE>
+		 <ID>Vouchers</ID>
+	 </HEADER>
+	<BODY>
+		<DESC>
+		 </DESC>
+			 <DATA>
+				 <TALLYMESSAGE>
+					 <VOUCHER DATE="$voucherDate" TAGNAME = "$voucherNumber" TAGVALUE="$tagValue" Action="$action" VCHTYPE = "$voucherType">
+					 <DATE>$voucherDate</DATE>
+					 <NARRATION>$narration</NARRATION>
+					 </VOUCHER>
+				 </TALLYMESSAGE>
+			 </DATA>
+	 </BODY>
+</ENVELOPE>
