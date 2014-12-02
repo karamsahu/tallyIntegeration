@@ -23,8 +23,11 @@ import org.xml.sax.InputSource;
 public class XmlParser {
 	public static double costPrice;
 	public static double sellingPrice;
-	
-	
+	public static String toDate,fromDate;
+	public static double totalCost;
+	public static double vat;
+	public static double totalBillAmt;
+
 	public static void getProfitAndLoss(String tallyXmlResponse) throws XMLStreamException{
 		try {
 			  //File file = new File("templates/response/pnl_response.xml");
@@ -92,8 +95,9 @@ public class XmlParser {
 		
 	}
 	
-	public static void getProfitAndLoss(String tallyXmlResponse, String fromDate, String toDate){
-
+	public static void getDayWiseProfit(String tallyXmlResponse){
+		totalCost = 0;
+		totalBillAmt=0;
 		try {
 			  //File file = new File("templates/response/pnl_response.xml");
 			  DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -104,9 +108,9 @@ public class XmlParser {
 			  Document doc = db.parse(is);
 			  doc.getDocumentElement().normalize();
 			  
-			  //get the size of node
-			  NodeList nodes = doc.getElementsByTagName("ALLINVENTORYENTRIES.LIST");
 			  
+			  
+			  NodeList nodes = doc.getElementsByTagName("ALLINVENTORYENTRIES.LIST");
 			  for(int n=0; n<nodes.getLength(); n++){
 				  Node node = nodes.item(n);
 				  if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -116,14 +120,20 @@ public class XmlParser {
 					  String disc = getValue("DISCOUNT", element);
 					  String billAmt = getValue("AMOUNT", element);
 					  String billQty = getValue("BILLEDQTY", element);
+					  String vat = getValue("TAXCLASSIFICATIONNAME", element);
+					  if(vat.equals("")){
+						  XmlParser.vat=0;
+					  }else{
+						  vat = vat.substring(vat.length()-2);
+						  XmlParser.vat = Double.parseDouble(vat.substring(0, 1));
+					  }
 					  calculatePnlData(name,rate,disc,billAmt,billQty); // call method to calculate
 					  }
 				  System.out.println("------------------------------------------------------------");
 			  }
 			  
-			  generatePnLReport();// print final pln report
 			  
-
+			  generatePnLReport();// print final pln report
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -141,36 +151,47 @@ public class XmlParser {
 				totalprofit = totalprofit+profit;
 				item++;
 			}
-			System.out.println("Total profit is Rs."+totalprofit+" for "+item+"s sold");
-	}
+			
+			
+			System.out.println("Total cost is : "+ totalCost);
+			System.out.println("Total Gross profit is Rs."+totalprofit+" for "+item+" items sold");
+			double totalVat = totalBillAmt*vat/100;
+			System.out.println("Total Vat amount : "+totalVat);
+			double netProfit =  (totalprofit-totalVat) ;
+			System.out.println("Total Net profit is Rs. : "+netProfit);
+			double profitPercent = ((netProfit/totalCost)*100);
+			System.out.println("Total profit percentage is : "+ profitPercent);
+			System.out.println("Total Bill Amount :" + totalBillAmt);
+			
+		}
 	
 	private static void calculatePnlData(String name, String rate, String disc,
 			String billAmt, String billQty) throws NumberFormatException, Exception {
 			String cp = getItemPrice(name);  
 			costPrice = Double.parseDouble(cp.substring(0, cp.length()-4));
-			/*System.out.println("-------------------------\n STOCK ITEM NAME: " + name);
-			System.out.println("Stock Item cost : " +costPrice);
-			System.out.println("RATE: " + rate);
-			System.out.println("DISCOUNT: " + disc);
-			System.out.println("Stock bill amount : " + billAmt);
-			System.out.println("Stock bill Quantity:" + billQty+"\n----------------------------------------");*/
+			System.out.println("-------------------------\nItem Name : " + name);
+			System.out.println("Item cost price : " +costPrice);
+			System.out.println("Item selling price : " + rate);
+			System.out.println("Item discount : " + disc);
+			System.out.println("bill amount : " + billAmt);
+			System.out.println("Quantity sold :" + billQty+"\n----------------------------------------");
+			double qty = Double.parseDouble(billQty.substring(0,billQty.length()-3));
 			double sellingPrice = Double.parseDouble(rate.substring(0, rate.length()-4));
 			double discount = Double.parseDouble(disc);
-			double vat = 0;
-			
-			
-			double profit =  sellingPrice - vat - costPrice - discount;
+			double cost = costPrice*qty;
+
+			double profit =  (sellingPrice * qty) - cost - discount;
 			System.out.println(name +" : "+ profit);
-			
+			totalCost = totalCost+cost;
+			totalBillAmt = totalBillAmt+Double.parseDouble(billAmt);
 			profitArray.add(profit);
 			
-			
-			/*
-			Map<String,Object> dataMap = new HashMap<String,Object>();
+			/*Map<String,Object> dataMap = new HashMap<String,Object>();
 			dataMap.put("name", name);
 			dataMap.put("rate", rate);
 			dataMap.put("disc", disc);
 			dataMap.put("billAmt", billAmt);
+			dataMap.put("billQty", billQty);
 			dataMap.put("cp", cp);
 			dataMap.put("profit", profit);
 			reportMap.put(name, dataMap);*/
@@ -191,13 +212,11 @@ public class XmlParser {
 			  
 			  //get the size of node
 			  NodeList nodes = doc.getElementsByTagName("TALLYMESSAGE");
-			  System.out.println(nodes.getLength());
 			  for(int n=0; n<nodes.getLength(); n++){
 				  Node node = nodes.item(n);
 				  if (node.getNodeType() == Node.ELEMENT_NODE) {
 					  Element element = (Element) node;
 					  cp = getValue("OPENINGRATE", element);
-					  System.out.println("Item Cost :: " + cp );
 					  }
 			  }
 		}catch(Exception e){
@@ -208,10 +227,14 @@ public class XmlParser {
 	
 	//to get values of elements
 	private static String getValue(String tag, Element element) {
+		String value="";
 		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-		Node node = (Node) nodes.item(0);
-		return node.getNodeValue();
+		if(nodes.item(0)!=null){
+			Node node = (Node) nodes.item(0);
+			value = node.getNodeValue();
 		}
+		return value;
+	}
 
 	private static String getItemPrice(String ProductName) throws Exception{
 		String responseXml = TallyRequest.SendToTally(

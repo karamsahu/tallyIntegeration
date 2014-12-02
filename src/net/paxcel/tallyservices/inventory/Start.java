@@ -26,7 +26,7 @@ public class Start {
 	 * show one //this will get one stock item listed inside checkRequest method of Start.java file
 	 * show summary //show stock summary new inventory
 	 * show pnl //calculate profit and loss
-	 * 
+	 * daily profit // gives you day wise profitability report from tally
 	 * These request can be set in main method in Start.java class file.
 	 * */
 	
@@ -35,15 +35,20 @@ public class Start {
 		loadTemplates();					//load xml templates
 		requestType="daily profit"; 			//setting type of request
 		path = checkRequest(requestType);	//set template path as per the request
-		xmlWithValue = fillTemplate(path);	//fillTemplate method create xml with values
 		try {
-			String tallyXmlResponse = TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for to get tally response xml
 			if(requestType.equals("show pnl")){
+				xmlWithValue = fillTemplate(path);	//fillTemplate method create xml with values
+				String tallyXmlResponse = TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for to get tally response xml
 				XmlParser.getProfitAndLoss(tallyXmlResponse);
 			}else if(requestType.equals("daily profit")){
-				fromDate="1-Nov-2014"; //not done in xml
-				toDate="31-Nov-2014"; //not done in xml
-				XmlParser.getProfitAndLoss(tallyXmlResponse,fromDate,toDate);
+				fromDate="1-Dec-2014"; 
+				toDate="31-Dec-2014"; 
+				xmlWithValue = fillTemplate(path);	//fillTemplate method create xml with values
+				String tallyXmlResponse = TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for to get tally response xml
+				XmlParser.getDayWiseProfit(tallyXmlResponse);
+			}else{
+				xmlWithValue = fillTemplate(path);	//fillTemplate method create xml with values
+				String tallyXmlResponse = TallyRequest.SendToTally(xmlWithValue);		//passing xml with values to tally for to get tally response xml
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,6 +102,8 @@ public class Start {
 	        context.put("type", "Object");
 	        context.put("subType", "Stock Item");
 	        context.put("id", productId); /*product id is the id for which xml will fetch data*/
+	        context.put("toDate",toDate);
+	        context.put("fromDate", fromDate);
 	       
 	        //setting values in template for data tag and its attribute
 	        ArrayList<String> fetchList = new ArrayList<String>();
